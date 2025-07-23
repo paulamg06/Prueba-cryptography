@@ -9,7 +9,7 @@ def generate_rsa_key_pair():
     return private_key, public_key
 
 
-def serialize_private_key(private_key: RSAPrivateKey):
+def serialize_private_key(private_key):
     return private_key.private_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.PKCS8,
@@ -17,7 +17,7 @@ def serialize_private_key(private_key: RSAPrivateKey):
     )
 
 
-def serialize_public_key(public_key: RSAPublicKey):
+def serialize_public_key(public_key):
     return public_key.public_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo
