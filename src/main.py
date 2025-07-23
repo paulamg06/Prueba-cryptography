@@ -1,25 +1,36 @@
-from key_manager import generate_keys, save_private_key, save_public_key
-from crypto_utils import encrypt, decrypt, sign, verify
+from crypto_utils.key_manager import (
+    generate_rsa_key_pair,
+    generate_symmetric_key,
+    serialize_private_key,
+    serialize_public_key
+)
+from crypto_utils.asymmetric import sign_message, verify_signature
+from crypto_utils.symmetric import encrypt_message, decrypt_message
 
 def main():
-    private_key, public_key = generate_keys()
+    # Mensaje
+    message = "Este es un mensaje secreto."
 
-    message = b"Hello, this is a secret message."
-    print("Original:", message)
+    # --- Criptografía asimétrica ---
+    print("\n🛡️  Criptografía Asimétrica (Firma Digital)")
+    private_key, public_key = generate_rsa_key_pair()
 
-    # Encryption / Decryption
-    encrypted = encrypt(public_key, message)
-    print("Encrypted:", encrypted)
+    signature = sign_message(private_key, message.encode())
+    print("🔏 Firma generada.")
 
-    decrypted = decrypt(private_key, encrypted)
-    print("Decrypted:", decrypted)
+    is_valid = verify_signature(public_key, message.encode(), signature)
+    print("✅ Firma válida:", is_valid)
 
-    # Signing / Verifying
-    signature = sign(private_key, message)
-    print("Signature:", signature)
+    # --- Criptografía simétrica ---
+    print("\n🔐 Criptografía Simétrica (AES - Fernet)")
+    sym_key = generate_symmetric_key()
 
-    is_valid = verify(public_key, message, signature)
-    print("Signature valid?", is_valid)
+    ciphertext = encrypt_message(sym_key, message)
+    print("🧪 Mensaje cifrado:", ciphertext)
+
+    decrypted = decrypt_message(sym_key, ciphertext)
+    print("📜 Mensaje descifrado:", decrypted)
+
 
 if __name__ == "__main__":
     main()
