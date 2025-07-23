@@ -2,7 +2,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
 
-def sign_message(private_key, message: bytes) -> bytes:
+def sign_message(private_key: RSAPrivateKey, message: bytes) -> bytes:
     return private_key.sign(
         message,
         padding.PSS(
@@ -13,7 +13,7 @@ def sign_message(private_key, message: bytes) -> bytes:
     )
 
 
-def verify_signature(public_key, message: bytes, signature: bytes) -> bool:
+def verify_signature(public_key: RSAPublicKey, message: bytes, signature: bytes) -> bool:
     try:
         public_key.verify(
             signature,
